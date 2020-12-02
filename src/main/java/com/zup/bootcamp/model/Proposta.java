@@ -1,9 +1,6 @@
 package com.zup.bootcamp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -25,6 +22,7 @@ public class Proposta {
     private String nome;
 
     @NotBlank
+    @Column(unique=true)
     private String documento;
 
     @NotBlank
@@ -38,6 +36,8 @@ public class Proposta {
     @Positive
     private BigDecimal salario;
 
+    private StatusProposta status;
+
     public Proposta(@NotBlank String nome, @NotBlank String documento,
                     @NotBlank @Email String email, @NotBlank String endereco,
                     @NotNull @Positive BigDecimal salario) {
@@ -50,5 +50,21 @@ public class Proposta {
 
     public Long getId() {
         return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void atualizaStatusElegivel() {
+        this.status = StatusProposta.ELEGIVEL;
+    }
+
+    public void atualizaStatusNaoElegivel() {
+        this.status = StatusProposta.NAO_ELEGIVEL;
     }
 }

@@ -1,5 +1,6 @@
 package com.zup.bootcamp.request;
 
+import com.zup.bootcamp.infrastructure.PropostaRepository;
 import com.zup.bootcamp.model.Proposta;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
@@ -60,5 +61,9 @@ public class PropostaRequest {
 
         return cpfValidator.isValid(documento, null) ||
                 cnpjValidator.isValid(documento, null);
+    }
+
+    public boolean existeDocumento(PropostaRepository propostaRepository){
+        return propostaRepository.findByDocumento(documento).isPresent();
     }
 }
