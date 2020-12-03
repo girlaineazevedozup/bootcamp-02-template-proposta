@@ -1,4 +1,4 @@
-package com.zup.bootcamp.response;
+package com.zup.bootcamp.client.response;
 
 public class ResultadoAnaliseResponse {
 

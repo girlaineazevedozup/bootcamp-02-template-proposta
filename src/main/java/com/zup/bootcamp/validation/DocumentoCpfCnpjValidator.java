@@ -1,6 +1,6 @@
 package com.zup.bootcamp.validation;
 
-import com.zup.bootcamp.request.PropostaRequest;
+import com.zup.bootcamp.controller.request.PropostaRequest;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

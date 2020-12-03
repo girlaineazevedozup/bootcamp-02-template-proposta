@@ -1,4 +1,4 @@
-package com.zup.bootcamp.configuration;
+package com.zup.bootcamp.configuration.exception;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

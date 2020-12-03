@@ -3,12 +3,14 @@ package com.zup.bootcamp.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zup.bootcamp.client.AnaliseClient;
+import com.zup.bootcamp.controller.request.PropostaRequest;
+import com.zup.bootcamp.controller.response.DetalhePropostaResponse;
 import com.zup.bootcamp.infrastructure.ExecutorTransacao;
 import com.zup.bootcamp.infrastructure.PropostaRepository;
 import com.zup.bootcamp.model.Proposta;
-import com.zup.bootcamp.request.PropostaRequest;
-import com.zup.bootcamp.request.SolicitacaoAnaliseRequest;
-import com.zup.bootcamp.response.ResultadoAnaliseResponse;
+import com.zup.bootcamp.model.StatusProposta;
+import com.zup.bootcamp.client.request.SolicitacaoAnaliseRequest;
+import com.zup.bootcamp.client.response.ResultadoAnaliseResponse;
 import com.zup.bootcamp.validation.DocumentoCpfCnpjValidator;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -17,16 +19,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/propostas")
 public class PropostaController {
 
     @Autowired
@@ -45,8 +46,7 @@ public class PropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
-    @PostMapping(value = "/propostas")
-    @Transactional
+    @PostMapping
     public ResponseEntity<?> criaProposta(@RequestBody @Valid PropostaRequest propostaRequest,
                                           UriComponentsBuilder builder) throws JsonProcessingException {
 
@@ -62,12 +62,12 @@ public class PropostaController {
                             proposta.getId().toString()));
 
             if(resultadoAnalise.semRestricao())
-                proposta.atualizaStatusElegivel();
+                proposta.atualizaStatus(StatusProposta.ELEGIVEL);
 
         }catch (FeignException.UnprocessableEntity ex){
             ResultadoAnaliseResponse resultadoAnalise = new ObjectMapper().readValue(ex.contentUTF8(), ResultadoAnaliseResponse.class);
             if(resultadoAnalise.temRestricao())
-                proposta.atualizaStatusNaoElegivel();
+                proposta.atualizaStatus(StatusProposta.NAO_ELEGIVEL);
         }
 
         executorTransacao.atualizaEComita(proposta);
@@ -78,4 +78,15 @@ public class PropostaController {
         return ResponseEntity.created(enderecoConsulta).build();
     }
 
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> detalhaProposta(@PathVariable("id") Long id){
+        Optional<Proposta> proposta = propostaRepository.findById(id);
+
+        if(proposta.isEmpty())
+            return ResponseEntity.notFound().build();
+        DetalhePropostaResponse detalhePropostaResponse = new DetalhePropostaResponse(proposta.get());
+
+        return ResponseEntity.ok(detalhePropostaResponse);
+    }
 }

@@ -1,4 +1,4 @@
-package com.zup.bootcamp.configuration;
+package com.zup.bootcamp.configuration.exception;
 
 import java.util.ArrayList;
 import java.util.List;

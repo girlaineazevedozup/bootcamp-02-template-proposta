@@ -1,4 +1,4 @@
-package com.zup.bootcamp.configuration;
+package com.zup.bootcamp.configuration.exception;
 
 public class FieldErrorController {
 

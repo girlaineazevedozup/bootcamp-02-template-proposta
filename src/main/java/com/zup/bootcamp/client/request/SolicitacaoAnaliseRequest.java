@@ -1,4 +1,4 @@
-package com.zup.bootcamp.request;
+package com.zup.bootcamp.client.request;
 
 public class SolicitacaoAnaliseRequest {
 

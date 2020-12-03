@@ -1,4 +1,4 @@
-package com.zup.bootcamp.request;
+package com.zup.bootcamp.controller.request;
 
 import com.zup.bootcamp.infrastructure.PropostaRepository;
 import com.zup.bootcamp.model.Proposta;

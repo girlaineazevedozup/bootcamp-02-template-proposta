@@ -38,6 +38,8 @@ public class Proposta {
 
     private StatusProposta status;
 
+    private String numeroCartao;
+
     public Proposta(@NotBlank String nome, @NotBlank String documento,
                     @NotBlank @Email String email, @NotBlank String endereco,
                     @NotNull @Positive BigDecimal salario) {
@@ -56,15 +58,35 @@ public class Proposta {
         return nome;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
+    }
+
+    public StatusProposta getStatus() {
+        return status;
+    }
+
     public String getDocumento() {
         return documento;
     }
 
-    public void atualizaStatusElegivel() {
-        this.status = StatusProposta.ELEGIVEL;
+    public String getNumeroCartao() {
+        return numeroCartao;
     }
 
-    public void atualizaStatusNaoElegivel() {
-        this.status = StatusProposta.NAO_ELEGIVEL;
+    public void setNumeroCartao(String numeroCartao) {
+        this.numeroCartao = numeroCartao;
+    }
+
+    public void atualizaStatus(StatusProposta statusProposta) {
+        this.status = statusProposta;
     }
 }
