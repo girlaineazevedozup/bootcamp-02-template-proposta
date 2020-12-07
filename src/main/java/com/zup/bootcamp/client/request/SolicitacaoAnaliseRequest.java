@@ -1,12 +1,14 @@
 package com.zup.bootcamp.client.request;
 
+import java.util.UUID;
+
 public class SolicitacaoAnaliseRequest {
 
     private String documento;
     private String nome;
-    private String idProposta;
+    private UUID   idProposta;
 
-    public SolicitacaoAnaliseRequest(String documento, String nome, String idProposta) {
+    public SolicitacaoAnaliseRequest(String documento, String nome, UUID idProposta) {
         this.documento = documento;
         this.nome = nome;
         this.idProposta = idProposta;
@@ -20,7 +22,7 @@ public class SolicitacaoAnaliseRequest {
         return nome;
     }
 
-    public String getIdProposta() {
+    public UUID getIdProposta() {
         return idProposta;
     }
 }

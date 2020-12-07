@@ -22,7 +22,8 @@ public class DetalhePropostaResponse {
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
         this.status = proposta.getStatus();
-        this.numeroCartao = proposta.getNumeroCartao();
+        if(proposta.getCartao() != null)
+            this.numeroCartao = proposta.getCartao().getNumero();
     }
 
     public String getNome() {

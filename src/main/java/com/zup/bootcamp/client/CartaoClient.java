@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.UUID;
+
 @FeignClient(value = "cartao", url = "${cartaoClient.host}")
 public interface CartaoClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/cartoes")
-    public CartaoResponse solicitacaoCartao(@RequestParam("idProposta") Long idProposta);
+    public CartaoResponse solicitacaoCartao(@RequestParam("idProposta") UUID idProposta);
 }

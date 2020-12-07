@@ -3,14 +3,14 @@ package com.zup.bootcamp.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zup.bootcamp.client.AnaliseClient;
+import com.zup.bootcamp.client.request.SolicitacaoAnaliseRequest;
+import com.zup.bootcamp.client.response.ResultadoAnaliseResponse;
 import com.zup.bootcamp.controller.request.PropostaRequest;
 import com.zup.bootcamp.controller.response.DetalhePropostaResponse;
 import com.zup.bootcamp.infrastructure.ExecutorTransacao;
 import com.zup.bootcamp.infrastructure.PropostaRepository;
 import com.zup.bootcamp.model.Proposta;
 import com.zup.bootcamp.model.StatusProposta;
-import com.zup.bootcamp.client.request.SolicitacaoAnaliseRequest;
-import com.zup.bootcamp.client.response.ResultadoAnaliseResponse;
 import com.zup.bootcamp.validation.DocumentoCpfCnpjValidator;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/propostas")
@@ -59,7 +60,7 @@ public class PropostaController {
         try{
             ResultadoAnaliseResponse resultadoAnalise = analiseClient.solicitacaoAnalise(
                     new SolicitacaoAnaliseRequest(proposta.getDocumento(), proposta.getDocumento(),
-                            proposta.getId().toString()));
+                            proposta.getId()));
 
             if(resultadoAnalise.semRestricao())
                 proposta.atualizaStatus(StatusProposta.ELEGIVEL);
@@ -80,7 +81,7 @@ public class PropostaController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> detalhaProposta(@PathVariable("id") Long id){
+    public ResponseEntity<?> detalhaProposta(@PathVariable("id") UUID id){
         Optional<Proposta> proposta = propostaRepository.findById(id);
 
         if(proposta.isEmpty())

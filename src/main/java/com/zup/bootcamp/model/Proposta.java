@@ -1,11 +1,14 @@
 package com.zup.bootcamp.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 public class Proposta {
@@ -15,8 +18,8 @@ public class Proposta {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Type(type="uuid-char")
+    private UUID id = UUID.randomUUID();
 
     @NotBlank
     private String nome;
@@ -36,9 +39,11 @@ public class Proposta {
     @Positive
     private BigDecimal salario;
 
+    @Enumerated
     private StatusProposta status;
 
-    private String numeroCartao;
+    @OneToOne
+    private Cartao cartao;
 
     public Proposta(@NotBlank String nome, @NotBlank String documento,
                     @NotBlank @Email String email, @NotBlank String endereco,
@@ -50,7 +55,7 @@ public class Proposta {
         this.salario = salario;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -78,12 +83,12 @@ public class Proposta {
         return documento;
     }
 
-    public String getNumeroCartao() {
-        return numeroCartao;
+    public Cartao getCartao() {
+        return cartao;
     }
 
-    public void setNumeroCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
+    public void setCartao(Cartao cartao) {
+        this.cartao = cartao;
     }
 
     public void atualizaStatus(StatusProposta statusProposta) {
