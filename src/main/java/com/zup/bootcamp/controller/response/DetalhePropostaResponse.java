@@ -4,6 +4,7 @@ import com.zup.bootcamp.model.Proposta;
 import com.zup.bootcamp.model.StatusProposta;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class DetalhePropostaResponse {
 
@@ -13,7 +14,7 @@ public class DetalhePropostaResponse {
     private String endereco;
     private BigDecimal salario;
     private StatusProposta status;
-    private String numeroCartao;
+    private UUID idCartao;
 
     public DetalhePropostaResponse(Proposta proposta) {
         this.nome = proposta.getNome();
@@ -23,7 +24,7 @@ public class DetalhePropostaResponse {
         this.salario = proposta.getSalario();
         this.status = proposta.getStatus();
         if(proposta.getCartao() != null)
-            this.numeroCartao = proposta.getCartao().getNumero();
+            idCartao = proposta.getCartao().getId();
     }
 
     public String getNome() {
@@ -50,7 +51,7 @@ public class DetalhePropostaResponse {
         return status;
     }
 
-    public String getNumeroCartao() {
-        return numeroCartao;
+    public UUID getIdCartao() {
+        return idCartao;
     }
 }

@@ -29,4 +29,7 @@ public class Cartao {
         return numero;
     }
 
+    public UUID getId() {
+        return id;
+    }
 }
