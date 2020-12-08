@@ -1,7 +1,7 @@
 package com.zup.bootcamp.controller.response;
 
 import com.zup.bootcamp.model.Proposta;
-import com.zup.bootcamp.model.StatusProposta;
+import com.zup.bootcamp.model.enums.StatusProposta;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package com.zup.bootcamp.infrastructure;
 
 import com.zup.bootcamp.model.Proposta;
-import com.zup.bootcamp.model.StatusProposta;
+import com.zup.bootcamp.model.enums.StatusProposta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

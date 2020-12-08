@@ -10,7 +10,7 @@ import com.zup.bootcamp.controller.response.DetalhePropostaResponse;
 import com.zup.bootcamp.infrastructure.ExecutorTransacao;
 import com.zup.bootcamp.infrastructure.PropostaRepository;
 import com.zup.bootcamp.model.Proposta;
-import com.zup.bootcamp.model.StatusProposta;
+import com.zup.bootcamp.model.enums.StatusProposta;
 import com.zup.bootcamp.validation.DocumentoCpfCnpjValidator;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -31,6 +31,8 @@ import java.util.UUID;
 @RequestMapping("/propostas")
 public class PropostaController {
 
+    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+
     @Autowired
     private PropostaRepository propostaRepository;
 
@@ -44,8 +46,6 @@ public class PropostaController {
     public void init(WebDataBinder binder) {
         binder.addValidators(new DocumentoCpfCnpjValidator());
     }
-
-    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
     @PostMapping
     public ResponseEntity<?> criaProposta(@RequestBody @Valid PropostaRequest propostaRequest,

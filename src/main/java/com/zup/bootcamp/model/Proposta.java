@@ -1,5 +1,6 @@
 package com.zup.bootcamp.model;
 
+import com.zup.bootcamp.model.enums.StatusProposta;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

@@ -1,8 +1,10 @@
 package com.zup.bootcamp.model;
 
+import com.zup.bootcamp.model.enums.StatusCartao;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import java.util.UUID;
@@ -16,6 +18,9 @@ public class Cartao {
 
     @NotBlank
     private String numero;
+
+    @Enumerated
+    private StatusCartao status;
 
     @Deprecated
     public Cartao(){
@@ -31,5 +36,9 @@ public class Cartao {
 
     public UUID getId() {
         return id;
+    }
+
+    public void bloqueia() {
+        this.status = StatusCartao.BLOQUEADO;
     }
 }
