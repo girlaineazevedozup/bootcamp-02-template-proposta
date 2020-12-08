@@ -1,11 +1,11 @@
 package com.zup.bootcamp.client.response;
 
-public class BloqueioResponse {
+public class ResultadoResponse {
 
     private String resultado;
 
     @Deprecated
-    public BloqueioResponse() {
+    public ResultadoResponse() {
     }
 
     public String getResultado() {
