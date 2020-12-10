@@ -1,5 +1,6 @@
 package com.zup.bootcamp.model;
 
+import com.zup.bootcamp.model.converter.CryptoConverter;
 import com.zup.bootcamp.model.enums.StatusProposta;
 import org.hibernate.annotations.Type;
 
@@ -27,6 +28,7 @@ public class Proposta {
 
     @NotBlank
     @Column(unique=true)
+    @Convert(converter = CryptoConverter.class)
     private String documento;
 
     @NotBlank

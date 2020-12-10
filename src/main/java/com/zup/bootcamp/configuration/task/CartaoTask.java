@@ -33,7 +33,7 @@ public class CartaoTask {
 
     @Scheduled(fixedDelayString = "${periodicidade.associa-cartao}")
     @Transactional
-    private void associaCartao() {
+    protected void associaCartao() {
 
         List<Proposta> listaProposta = propostaRepository.findByStatusAndCartaoNull(StatusProposta.ELEGIVEL);
 

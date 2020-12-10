@@ -13,6 +13,8 @@ import com.zup.bootcamp.model.Proposta;
 import com.zup.bootcamp.model.enums.StatusProposta;
 import com.zup.bootcamp.validation.DocumentoCpfCnpjValidator;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,12 @@ public class PropostaController {
 
     private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
+    private final Tracer tracer;
+
+    public PropostaController(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
     @Autowired
     private PropostaRepository propostaRepository;
 
@@ -51,8 +59,12 @@ public class PropostaController {
     public ResponseEntity<?> criaProposta(@RequestBody @Valid PropostaRequest propostaRequest,
                                           UriComponentsBuilder builder) throws JsonProcessingException {
 
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("user.email", "girlaine.azevedo@zup.com.br");
+        activeSpan.setBaggageItem("user.email", "girlaine.azevedo@zup.com.br");
+
         if(propostaRequest.existeDocumento(propostaRepository))
-            return ResponseEntity.unprocessableEntity().body("Já existe uma proposta para o solicitante: " + propostaRequest.getDocumento()  );
+            return ResponseEntity.unprocessableEntity().body("Já existe uma proposta para este solicitante" );
 
         Proposta proposta = propostaRequest.toModel();
         executorTransacao.salvaEComita(proposta);
@@ -73,7 +85,7 @@ public class PropostaController {
 
         executorTransacao.atualizaEComita(proposta);
 
-        logger.info("Proposta do solicitante documento={} criada com sucesso!", proposta.getDocumento());
+        logger.info("Proposta criada com sucesso!");
 
         URI enderecoConsulta = builder.path("/propostas/{id}").build(proposta.getId());
         return ResponseEntity.created(enderecoConsulta).build();

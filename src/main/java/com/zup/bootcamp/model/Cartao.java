@@ -1,8 +1,10 @@
 package com.zup.bootcamp.model;
 
+import com.zup.bootcamp.model.converter.CryptoConverter;
 import com.zup.bootcamp.model.enums.StatusCartao;
 import org.hibernate.annotations.Type;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ public class Cartao {
     private UUID id = UUID.randomUUID();
 
     @NotBlank
+    @Convert(converter = CryptoConverter.class)
     private String numero;
 
     @Enumerated
