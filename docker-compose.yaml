@@ -33,9 +33,11 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
+    restart: on-failure
 
   db-proposta:
     image: 'postgres:9.6-alpine'
+    restart: on-failure
     volumes:
       - db-proposta-volume:/var/lib/postgresql/data
     ports:

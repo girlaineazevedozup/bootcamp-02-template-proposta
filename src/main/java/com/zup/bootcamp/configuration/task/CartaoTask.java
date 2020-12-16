@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -31,19 +31,32 @@ public class CartaoTask {
     @Autowired
     private CartaoClient cartaoClient;
 
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
     @Scheduled(fixedDelayString = "${periodicidade.associa-cartao}")
-    @Transactional
     protected void associaCartao() {
 
-        List<Proposta> listaProposta = propostaRepository.findByStatusAndCartaoNull(StatusProposta.ELEGIVEL);
+        boolean propostasPendentes = true;
 
-        listaProposta.forEach(proposta -> {
-            Cartao cartao = solicitaCartao(proposta);
-            if(cartao != null){
-                proposta.setCartao(cartao);
-                executorTransacao.atualizaEComita(proposta);
-            }
-        });
+        while(propostasPendentes){
+
+            //noinspection ConstantConditions
+            propostasPendentes = transactionTemplate.execute((transactionStatus) -> {
+                List<Proposta> propostasElegiveis = propostaRepository.findTop10ByStatusAndCartaoNullOrderByInstanteInclusaoAsc(StatusProposta.ELEGIVEL);
+                if(propostasElegiveis.isEmpty())
+                    return false;
+
+                propostasElegiveis.forEach(proposta -> {
+                    Cartao cartao = solicitaCartao(proposta);
+                    if(cartao != null){
+                        proposta.setCartao(cartao);
+                        executorTransacao.atualizaEComita(proposta);
+                    }
+                });
+                return true;
+            });
+        }
     }
 
     private Cartao solicitaCartao(Proposta proposta){

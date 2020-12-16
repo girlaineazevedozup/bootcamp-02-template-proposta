@@ -5,11 +5,9 @@ import com.zup.bootcamp.model.enums.StatusProposta;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -47,6 +45,9 @@ public class Proposta {
 
     @OneToOne
     private Cartao cartao;
+
+    @PastOrPresent
+    private LocalDateTime instanteInclusao = LocalDateTime.now();
 
     public Proposta(@NotBlank String nome, @NotBlank String documento,
                     @NotBlank @Email String email, @NotBlank String endereco,
@@ -88,6 +89,10 @@ public class Proposta {
 
     public Cartao getCartao() {
         return cartao;
+    }
+
+    public LocalDateTime getInstanteInclusao() {
+        return instanteInclusao;
     }
 
     public void setCartao(Cartao cartao) {
